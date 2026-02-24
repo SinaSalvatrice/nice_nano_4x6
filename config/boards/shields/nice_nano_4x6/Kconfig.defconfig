@@ -1,0 +1,6 @@
+if SHIELD_NICE_NANO_4X6
+
+config ZMK_KEYBOARD_NAME
+    default "nice_nano_4x6"
+
+endif
