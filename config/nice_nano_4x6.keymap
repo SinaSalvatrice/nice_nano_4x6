@@ -1,0 +1,56 @@
+// Define Layers
+#define LAYER_NUMPAD 0
+#define LAYER_EDIT 1
+
+// Keymap
+const struct keymap_layer keymaps[1 + 1] = {
+    [LAYER_NUMPAD] = LAYOUT_6x4(
+        &kp NUM_1, &kp NUM_2, &kp NUM_3, &kp NUM_4,
+        &kp NUM_5, &kp NUM_6, &kp NUM_7, &kp NUM_8,
+        &kp NUM_9, &kp NUM_0, &kp KP_MINUS, &kp KP_PLUS,
+        &kp KP_ASTERISK, &kp KP_SLASH, &kp KP_ENTER, &kp NO
+    ),
+
+    [LAYER_EDIT] = LAYOUT_6x4(
+        &kp Q, &kp W, &kp E, &kp R,
+        &kp A, &kp S, &kp D, &kp F,
+        &kp Z, &kp X, &kp C, &kp V,
+        &kp NO, &kp NO, &kp NO, &kp NO
+    ),
+};
+
+// Encoder bindings
+const struct encoder_config encoders[] = {
+    [0] = {
+        .en_base = {
+            .type = ENCODER_ROTATE,
+            .behaviors = {
+                [0] = {
+                    .id = 0,
+                    .layer = LAYER_EDIT,
+                    .behavior = &kp VOL_DOWN,
+                },
+                [1] = {
+                    .id = 1,
+                    .layer = LAYER_EDIT,
+                    .behavior = &kp VOL_UP,
+                },
+            },
+        },
+        .en_button = {
+            .type = ENCODER_BUTTON,
+            .behaviors = {
+                [LAYER_EDIT] = {
+                    .id = 2,
+                    .layer = LAYER_EDIT,
+                    .behavior = &kp LEFT_CTRL + &kp V,
+                },
+                [LAYER_NUMPAD] = {
+                    .id = 3,
+                    .layer = LAYER_NUMPAD,
+                    .behavior = &kp TOGGLE_UNDERGLOW,
+                },
+            },
+        },
+    },
+};
