@@ -1,4 +1,4 @@
-name: Build ZMK
+name: Build ZMK (nice_nano_v2)
 
 on:
   workflow_dispatch:
@@ -14,24 +14,28 @@ jobs:
     steps:
       - name: Checkout config repo
         uses: actions/checkout@v4
-        with:
-          path: config
 
-      - name: Checkout ZMK firmware
-        uses: actions/checkout@v4
-        with:
-          repository: zmkfirmware/zmk
-          path: zmk
+      - name: Build firmware in ZMK docker image
+        run: |
+          docker run --rm -t \
+            -v "${{ github.workspace }}:/workdir" \
+            -w /workdir \
+            zmkfirmware/zmk-build-arm:stable \
+            bash -lc '
+              set -e
+              git clone --depth 1 https://github.com/zmkfirmware/zmk.git zmk
+              cd zmk
+              west init -l app || true
+              west update
+              west zephyr-export
 
-      - name: Build (nice_nano_v2 + nice_nano_4x6)
-        uses: zmkfirmware/zmk-build-action@v1
-        with:
-          zmk_path: zmk
-          config_path: config/config
-          board: nice_nano_v2
-          shield: nice_nano_4x6
+              # Build: board + your shield, using your config folder
+              west build -s app -b nice_nano_v2 -- \
+                -DZMK_CONFIG=/workdir/config \
+                -DSHIELD=nice_nano_4x6
+            '
 
-      - name: Upload firmware
+      - name: Upload firmware (.uf2)
         uses: actions/upload-artifact@v4
         with:
           name: firmware
