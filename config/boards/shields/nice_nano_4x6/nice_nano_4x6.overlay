@@ -1,53 +1,31 @@
-#/dts-v1/;\n\n#include <dt-bindings/keyboard/keyboard.h>\n\n/ {\n    model = "Nice Nano 4x6 Keyboard";\n    compatible = "nice,nano-4x6";\n}\n\n&gpio {\n    compatible = "nordic,nrf-gpio";\n    #gpio-cells = <2>;\n    P0.31 {\n        label = "row0";\n    };\n    P0.29 {\n        label = "row1";\n    };\n    P0.02 {\n        label = "row2";\n    };\n    P1.15 {\n        label = "row3";\n    };\n    P1.13 {\n        label = "row4";\n    };\n    P1.11 {\n        label = "row5";\n    };\n    P0.10 {\n        label = "col0";\n    };\n    P0.09 {\n        label = "col1";\n    };\n    P1.06 {\n        label = "col2";\n    };\n    P1.04 {\n        label = "col3";\n    };\n\n    encoder {\n        compatible = "nordic,nrf-gpio-encoder";\n        a = <&gpio P0.11> ;\n        b = <&gpio P1.00> ;\n    };\n    ws2812 {\n        compatible = "ws2812";\n        pin = <&gpio P0.22> ;\n        length = <10>;\n    };\n    encoder-button {\n        compatible = "gpio-keys";\n        gpio = <&gpio P0.24>;\n        linux,default-trigger = "gpio-key-press";\n        gpios = <&gpio P0.24 GPIO_ACTIVE_LOW>;\n        custom_keymap = <KEY_ESC>;\n    };\n}\n\n
-/ {
-    chosen {
-        zmk,kscan = &kscan0;
-        zmk,underglow = &underglow;
-    };
+// ZMK overlay for a 6x4 row2col matrix
+
+#include <zmk/keys.h>
+
+#define MATRIX_ROWS 4
+#define MATRIX_COLS 6
+
+const uint8_t row_gpios[MATRIX_ROWS] = { P0.31, P0.29, P0.02, P1.15, P1.13, P1.11 };
+const uint8_t col_gpios[MATRIX_COLS] = { P0.10, P0.09, P1.06, P1.04 };
+
+// Enable EC11 encoder
+#include <zmk/encoder.h>
+
+#define ENCODER_A_PIN P0.11
+#define ENCODER_B_PIN P1.00
+#define ENCODER_STEPS 24
+
+// Define encoder button
+&gpio-keys {
+    compatible = "gpio-keys";
+    keymap = <P0.24>;
+    gpios = <&gpio0 24 GPIO_PULL_UP>;
 };
 
-&kscan0 {
-    compatible = "zmk,kscan-gpio-matrix";
-    diode-direction = "row2col";
-
-    row-gpios = <
-        &gpio0 31 (GPIO_ACTIVE_HIGH)
-        &gpio0 29 (GPIO_ACTIVE_HIGH)
-        &gpio0 2  (GPIO_ACTIVE_HIGH)
-        &gpio1 15 (GPIO_ACTIVE_HIGH)
-        &gpio1 13 (GPIO_ACTIVE_HIGH)
-        &gpio1 11 (GPIO_ACTIVE_HIGH)
-    >;
-
-    col-gpios = <
-        &gpio0 10 (GPIO_ACTIVE_HIGH)
-        &gpio0 9  (GPIO_ACTIVE_HIGH)
-        &gpio1 6  (GPIO_ACTIVE_HIGH)
-        &gpio1 4  (GPIO_ACTIVE_HIGH)
-    >;
-};
-
-&ec11 {
-    a-gpios = <&gpio0 11 (GPIO_ACTIVE_HIGH)>;
-    b-gpios = <&gpio1 0  (GPIO_ACTIVE_HIGH)>;
-    steps = <24>;
-};
-
-&underglow {
-    compatible = "zmk,underglow";
-    chain-length = <10>;
-    color-order = <ZMK_RGB_ORDER_GRB>;
-    status = "okay";
-};
-
+// Define WS2812 underglow
 &ws2812 {
-    status = "okay";
-};
-
- / {
-    underglow: underglow {
-        compatible = "zmk,ws2812";
-        label = "WS2812";
-        gpios = <&gpio0 22 (GPIO_ACTIVE_HIGH)>;
-    };
+    compatible = "ws2812";
+    chain-length = <10>;
+    rgb-order = "GRB";
+    gpios = <&gpio0 22>;
 };
