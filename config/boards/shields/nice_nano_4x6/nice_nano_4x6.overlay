@@ -1,31 +1,24 @@
-// ZMK overlay for a 6x4 row2col matrix
+// This is a valid Zephyr DTS overlay for the nice_nano_4x6 shield
 
-#include <zmk/keys.h>
-
-#define MATRIX_ROWS 4
-#define MATRIX_COLS 6
-
-const uint8_t row_gpios[MATRIX_ROWS] = { P0.31, P0.29, P0.02, P1.15, P1.13, P1.11 };
-const uint8_t col_gpios[MATRIX_COLS] = { P0.10, P0.09, P1.06, P1.04 };
-
-// Enable EC11 encoder
-#include <zmk/encoder.h>
-
-#define ENCODER_A_PIN P0.11
-#define ENCODER_B_PIN P1.00
-#define ENCODER_STEPS 24
-
-// Define encoder button
-&gpio-keys {
-    compatible = "gpio-keys";
-    keymap = <P0.24>;
-    gpios = <&gpio0 24 GPIO_PULL_UP>;
+/ { 
+    compatible = "zmk,zmkshield";
 };
 
-// Define WS2812 underglow
-&ws2812 {
+zmk,kscan-gpio-matrix {
+    diode-direction = <row2col>;
+    row-gpios = <&gpio0 31>, <&gpio0 29>, <&gpio0 2>, <&gpio1 15>, <&gpio1 13>, <&gpio1 11>;
+    col-gpios = <&gpio0 10>, <&gpio0 9>, <&gpio1 6>, <&gpio1 4>;
+};
+
+&ec11 {
+    a-gpios = <&gpio0 11>;
+    b-gpios = <&gpio1 0>;
+    steps = <24>;
+};
+
+&underglow {
     compatible = "ws2812";
-    chain-length = <10>;
-    rgb-order = "GRB";
     gpios = <&gpio0 22>;
+    chain-length = <10>;
+    rgb-format = <GRB>;
 };
