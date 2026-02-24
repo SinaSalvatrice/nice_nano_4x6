@@ -1,2 +1,11 @@
+# Configuration for nice_nano_4x6 Shield
+
+# This file is used for the nice_nano_4x6 shield configuration in ZMK.
+
+menuconfig NICE_NANO_4X6
+    bool "nice_nano_4x6"
+    default y
+    help
+        Configuration for the nice_nano_4x6 shield.
 config SHIELD_NICE_NANO_4X6
     def_bool $(shields_list_contains,nice_nano_4x6)
