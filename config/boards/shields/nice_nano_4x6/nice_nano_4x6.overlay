@@ -1,0 +1,25 @@
+// This is the device tree overlay for nice_nano_4x6 keyboard
+
+/ {
+    compatible = "zephyr,nice_nano_4x6";
+
+    led: ws2812@0 {
+        compatible = "ws2812";
+        reg = <0x22>;
+        label = "LED";
+        status = "okay";
+        led-controller = <&led0>;
+    };
+
+    encoder_a: encoder_a@0 {
+        compatible = "gpio-encoder";
+        pin_a = <11>;
+        pin_b = <0>;
+        encoder = <&encoder_a>;
+    };
+
+    encoder_button: encoder_button@0 {
+        compatible = "gpio-button";
+        pin = <24>;
+    };
+};
