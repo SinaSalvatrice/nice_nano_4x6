@@ -1,0 +1,37 @@
+name: Build ZMK Firmware
+
+on:
+  push:
+    branches:
+      - initial-zmk-config
+  pull_request:
+    branches:
+      - initial-zmk-config
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Configure ZMK
+        run: | 
+          cd firmware
+          cp -r ../../config/zmk-config .
+
+      - name: Build firmware
+        run: |
+          cd firmware
+          west build -s app/ -- -DOVERLAY_CONFIG=console
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: zmk-firmware
+          path: firmware/build/
