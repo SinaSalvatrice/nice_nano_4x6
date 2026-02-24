@@ -1,26 +1,32 @@
-name: Build
+name: Build ZMK
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - initial-zmk-config
+    branches: [ initial-zmk-config ]
   pull_request:
-    branches:
-      - initial-zmk-config
+    branches: [ initial-zmk-config ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Build and test
+      - name: Build ZMK firmware (using zmkfirmware/zmk)
         run: |
-          echo 'Building...'
+          docker run --rm -t \
+            -v "${{ github.workspace }}:/workspace" \
+            -w /workspace \
+            zmkfirmware/zmk-build-arm:stable \
+            west init -l config || true
 
-      - name: Upload artifact
+      - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
-          name: build-output
-          path: output-directory/
+          name: firmware
+          path: |
+            **/build/zephyr/*.uf2
+            **/build/zephyr/*.hex
+            **/build/zephyr/*.bin
