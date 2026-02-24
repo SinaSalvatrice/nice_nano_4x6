@@ -12,21 +12,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout config repo
+        uses: actions/checkout@v4
+        with:
+          path: config
 
-      - name: Build ZMK firmware (using zmkfirmware/zmk)
-        run: |
-          docker run --rm -t \
-            -v "${{ github.workspace }}:/workspace" \
-            -w /workspace \
-            zmkfirmware/zmk-build-arm:stable \
-            west init -l config || true
+      - name: Checkout ZMK firmware
+        uses: actions/checkout@v4
+        with:
+          repository: zmkfirmware/zmk
+          path: zmk
+
+      - name: Build (nice_nano_v2 + nice_nano_4x6)
+        uses: zmkfirmware/zmk-build-action@v1
+        with:
+          zmk_path: zmk
+          config_path: config/config
+          board: nice_nano_v2
+          shield: nice_nano_4x6
 
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
           name: firmware
-          path: |
-            **/build/zephyr/*.uf2
-            **/build/zephyr/*.hex
-            **/build/zephyr/*.bin
+          path: zmk/build/zephyr/*.uf2
