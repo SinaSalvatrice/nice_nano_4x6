@@ -1,0 +1,12 @@
+name: Build ZMK (nice_nano_v2)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ initial-zmk-config ]
+  pull_request:
+    branches: [ initial-zmk-config ]
+
+jobs:
+  build:
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
