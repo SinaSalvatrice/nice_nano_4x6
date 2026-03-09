@@ -33,7 +33,7 @@ jobs:
               west build -s app -b nice_nano_v2//zmk -- \
                 -DZMK_CONFIG=/workdir/config \
                 -DSHIELD=nice_nano_4x6
-            '
+            
 
             combos {
           compatible = "zmk,combos";
