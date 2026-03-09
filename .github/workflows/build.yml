@@ -33,16 +33,7 @@ jobs:
               west build -s app -b nice_nano_v2//zmk -- \
                 -DZMK_CONFIG=/workdir/config \
                 -DSHIELD=nice_nano_4x6
-            '
-
-            combos {
-          compatible = "zmk,combos";
-          combo_studio_unlock {
-          timeout-ms = <300>;
-            key-positions = <0 3>;
-            bindings = <&studio_unlock>;
-          };
-          };
+            
 
       - name: Upload firmware (.uf2)
         uses: actions/upload-artifact@v4
