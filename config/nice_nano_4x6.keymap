@@ -7,7 +7,7 @@
 
         combo_studio_unlock {
             timeout-ms = <300>;
-            key-positions = <0 20>;
+            key-positions = <20 24>;
             bindings = <&studio_unlock>;
         };
     };
@@ -23,6 +23,7 @@
                 &kp Z            &kp X     &kp C     &kp V
                 &kp N5           &kp N6    &kp N7    &kp N8
                 &kp LCTRL        &kp LSHFT &kp SPACE &kp RET
+                &none
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
