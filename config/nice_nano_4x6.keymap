@@ -7,7 +7,7 @@
 
         combo_studio_unlock {
             timeout-ms = <300>;
-            key-positions = <0 3>;
+            key-positions = <0 20>;
             bindings = <&studio_unlock>;
         };
     };
