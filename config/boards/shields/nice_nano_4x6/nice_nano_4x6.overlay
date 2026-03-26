@@ -82,19 +82,7 @@
         >;
     };
 
-    ec11: encoder {
-        compatible = "alps,ec11";
-        a-gpios = <&gpio0 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        b-gpios = <&gpio1 0  (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        steps = <24>;
-        status = "okay";
-    };
-
-    sensors: sensors {
-        compatible = "zmk,keymap-sensors";
-        sensors = <&ec11>;
-        triggers-per-rotation = <20>;
-    };
+    // Encoder moved to matrix position R0C0; device node removed
 };
 
 &pinctrl {
